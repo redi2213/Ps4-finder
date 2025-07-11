@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8" />
+<title>جستجوی بازی‌های PS4</title>
+<style>
+  body {
+    font-family: Tahoma, sans-serif;
+    direction: rtl;
+    background: #f2f2f2;
+    padding: 20px;
+  }
+  h2 {
+    text-align: center;
+  }
+  #searchBox {
+    display: flex;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto 20px;
+  }
+  #gameName {
+    flex: 1;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px 0 0 5px;
+    border: 1px solid #ccc;
+  }
+  #searchBtn {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    background-color: #0066cc;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+  #iframesContainer, #linksContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  iframe {
+    width: 100%;
+    height: 480px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  .link-only {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px dashed #999;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .link-only a {
+    font-size: 18px;
+    color: #007bff;
+    text-decoration: none;
+    word-wrap: break-word;
+  }
+</style>
+</head>
+<body>
+
+<h2>جستجوی بازی PS4 در سایت‌های مختلف</h2>
+
+<div id="searchBox">
+  <input type="text" id="gameName" placeholder="نام بازی را وارد کنید..." />
+  <button id="searchBtn">جستجو</button>
+</div>
+
+<div id="iframesContainer"></div>
+<div id="linksContainer"></div>
+
+<script>
+  function encodeGameName(name) {
+    return encodeURIComponent(name.trim()).replace(/%20/g, '+');
+  }
+
+  function createIframe(src, title) {
+    const iframe = document.createElement('iframe');
+    iframe.src = src;
+    iframe.title = title;
+    return iframe;
+  }
+
+  function createLinkBox(url, siteName) {
+    const box = document.createElement('div');
+    box.className = 'link-only';
+    box.innerHTML = `<strong>${siteName}</strong><br><a href="${url}" target="_blank">${url}</a>`;
+    return box;
+  }
+
+  function searchGame() {
+    const game = document.getElementById('gameName').value.trim();
+    if (!game) {
+      alert('لطفاً نام بازی را وارد کنید.');
+      return;
+    }
+
+    const encodedGame = encodeGameName(game);
+
+    const iframeSites = [
+      { site: 'Downloadha', url: `https://www.downloadha.com/?s=${encodedGame}` },
+      { site: 'P30day', url: `https://www.p30day.ir/?s=${encodedGame}` },
+      { site: 'P30Download', url: `https://p30download.ir/fa/console/search.php?search=${encodedGame}&blogs=19` },
+    ];
+
+    const linkOnlySites = [
+      { site: 'Top2Download', url: `https://top2download.ir/?s=${encodedGame}` },
+      { site: 'DLPsGame', url: `https://dlpsgame.com/?s=${encodedGame}` },
+    ];
+
+    const iframeContainer = document.getElementById('iframesContainer');
+    const linksContainer = document.getElementById('linksContainer');
+    iframeContainer.innerHTML = '';
+    linksContainer.innerHTML = '';
+
+    iframeSites.forEach(link => {
+      const iframe = createIframe(link.url, `نتایج ${link.site}`);
+      iframeContainer.appendChild(iframe);
+    });
+
+    linkOnlySites.forEach(link => {
+      const box = createLinkBox(link.url, link.site);
+      linksContainer.appendChild(box);
+    });
+  }
+
+  document.getElementById('searchBtn').addEventListener('click', searchGame);
+  document.getElementById('gameName').addEventListener('keydown', e => {
+    if (e.key === 'Enter') searchGame();
+  });
+</script>
+
+</body>
+</html>
