@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8" />
+<title>جستجوی بازی PS4</title>
+<style>
+  body { font-family: Tahoma, sans-serif; direction: rtl; padding: 20px; background: #f0f0f0; }
+  input, button { font-size: 18px; padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+  .links a { display: block; margin: 8px 0; color: #0066cc; text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<h2>جستجوی بازی PS4 در سایت‌های ایرانی</h2>
+<input type="text" id="gameName" placeholder="اسم بازی را وارد کنید..." />
+<button onclick="generateLinks()">جستجو</button>
+
+<div class="links" id="linksContainer"></div>
+
+<script>
+function encodeGameName(name) {
+  return encodeURIComponent(name.trim()).replace(/%20/g, '+');
+}
+
+function generateLinks() {
+  const game = document.getElementById('gameName').value;
+  if (!game) {
+    alert('لطفاً اسم بازی را وارد کنید');
+    return;
+  }
+  const encodedGame = encodeGameName(game);
+
+  const links = [
+    { site: 'Downloadha', url: `https://www.downloadha.com/?s=${encodedGame}` },
+    { site: 'Top2Download', url: `https://top2download.ir/?s=${encodedGame}` },
+    { site: 'P30day', url: `https://www.p30day.ir/?s=${encodedGame}` },
+    { site: 'DLPsGame', url: `https://dlpsgame.com/?s=${encodedGame}` },
+    { site: 'P30Download', url: `https://p30download.ir/fa/console/search.php?search=${encodedGame}&blogs=19` },
+  ];
+
+  const container = document.getElementById('linksContainer');
+  container.innerHTML = '';
+
+  links.forEach(link => {
+    const a = document.createElement('a');
+    a.href = link.url;
+    a.target = '_blank';
+    a.textContent = `${link.site} - جستجو برای "${game}"`;
+    container.appendChild(a);
+  });
+}
+</script>
+</body>
+</html>
